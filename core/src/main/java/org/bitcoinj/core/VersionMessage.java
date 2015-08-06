@@ -89,7 +89,7 @@ public class VersionMessage extends Message {
     
     public VersionMessage(NetworkParameters params, int newBestHeight) {
         super(params);
-        clientVersion = NetworkParameters.PROTOCOL_VERSION;
+        clientVersion = params.getProtocolVersion();
         localServices = 0;
         time = System.currentTimeMillis() / 1000;
         // Note that the official client doesn't do anything with these, and finding out your own external IP address

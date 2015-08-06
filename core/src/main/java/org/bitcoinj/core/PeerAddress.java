@@ -81,34 +81,34 @@ public class PeerAddress extends ChildMessage {
      * Constructs a peer address from the given IP address and port. Protocol version is the default.
      */
     public PeerAddress(InetAddress addr, int port) {
-        this(addr, port, NetworkParameters.PROTOCOL_VERSION);
+        this(addr, port, MainNetParams.get().getProtocolVersion());
     }
 
     /**
      * Constructs a peer address from the given IP address. Port and protocol version are default for the mainnet.
      */
     public PeerAddress(InetAddress addr) {
-        this(addr, MainNetParams.get().getPort());
+        this(addr, MainNetParams.get().getPort(), MainNetParams.get().getProtocolVersion());
     }
 
     /**
      * Constructs a peer address from an {@link InetSocketAddress}. An InetSocketAddress can take in as parameters an
      * InetAddress or a String hostname. If you want to connect to a .onion, set the hostname to the .onion address.
      */
-    public PeerAddress(InetSocketAddress addr) {
+    public PeerAddress(NetworkParameters params, InetSocketAddress addr) {
         if (addr.getHostName() == null || !addr.getHostName().toLowerCase().endsWith(".onion")) {
             this.addr = checkNotNull(addr.getAddress());
         } else {
             this.hostname = addr.getHostName();
         }
         this.port = addr.getPort();
-        this.protocolVersion = NetworkParameters.PROTOCOL_VERSION;
+        this.protocolVersion = params.getProtocolVersion();
         this.services = BigInteger.ZERO;
         length = protocolVersion > 31402 ? MESSAGE_SIZE : MESSAGE_SIZE - 4;
     }
 
     public static PeerAddress localhost(NetworkParameters params) {
-        return new PeerAddress(InetAddresses.forString("127.0.0.1"), params.getPort());
+        return new PeerAddress(InetAddresses.forString("127.0.0.1"), params.getPort(), params.getProtocolVersion());
     }
 
     @Override

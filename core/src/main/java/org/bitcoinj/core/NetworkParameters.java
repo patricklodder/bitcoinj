@@ -476,4 +476,11 @@ public abstract class NetworkParameters {
     public int getMajorityWindow() {
         return majorityWindow;
     }
+
+    /**
+     * Instance-scope getter of protocol version
+     */
+    public int getProtocolVersion() {
+        return PROTOCOL_VERSION;
+    }
 }

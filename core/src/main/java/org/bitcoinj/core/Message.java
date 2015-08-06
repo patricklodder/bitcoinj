@@ -118,11 +118,11 @@ public abstract class Message {
     }
 
     Message(NetworkParameters params, byte[] payload, int offset) throws ProtocolException {
-        this(params, payload, offset, NetworkParameters.PROTOCOL_VERSION, params.getDefaultSerializer(), UNKNOWN_LENGTH);
+        this(params, payload, offset, params.getProtocolVersion(), params.getDefaultSerializer(), UNKNOWN_LENGTH);
     }
 
     Message(NetworkParameters params, byte[] payload, int offset, MessageSerializer serializer, int length) throws ProtocolException {
-        this(params, payload, offset, NetworkParameters.PROTOCOL_VERSION, serializer, length);
+        this(params, payload, offset, params.getProtocolVersion(), serializer, length);
     }
 
     // These methods handle the serialization/deserialization using the custom Bitcoin protocol.

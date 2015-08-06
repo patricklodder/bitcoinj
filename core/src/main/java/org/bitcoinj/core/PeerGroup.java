@@ -760,7 +760,7 @@ public class PeerGroup implements TransactionBroadcaster {
 
     /** Convenience method for addAddress(new PeerAddress(address, params.port)); */
     public void addAddress(InetAddress address) {
-        addAddress(new PeerAddress(address, params.getPort()));
+        addAddress(new PeerAddress(address, params.getPort(), params.getProtocolVersion()));
     }
 
     /**
@@ -788,7 +788,7 @@ public class PeerGroup implements TransactionBroadcaster {
         for (PeerDiscovery peerDiscovery : peerDiscoverers /* COW */) {
             InetSocketAddress[] addresses;
             addresses = peerDiscovery.getPeers(5, TimeUnit.SECONDS);
-            for (InetSocketAddress address : addresses) addressList.add(new PeerAddress(address));
+            for (InetSocketAddress address : addresses) addressList.add(new PeerAddress(params, address));
             if (addressList.size() >= maxPeersToDiscoverCount) break;
         }
         if (!addressList.isEmpty()) {
@@ -1177,7 +1177,7 @@ public class PeerGroup implements TransactionBroadcaster {
     public Peer connectTo(InetSocketAddress address) {
         lock.lock();
         try {
-            PeerAddress peerAddress = new PeerAddress(address);
+            PeerAddress peerAddress = new PeerAddress(params, address);
             backoffMap.put(peerAddress, new ExponentialBackoff(peerBackoffParams));
             return connectTo(peerAddress, true, vConnectTimeoutMillis);
         } finally {
